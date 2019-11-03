@@ -1,7 +1,7 @@
 import json
 from datetime import datetime as dt
 import discord
-with open("config.json") as f:
+with open("config.json", encoding="utf8") as f:
     config = json.loads(f.read())
     defaultEmbed = config["embed"]
 
@@ -9,10 +9,10 @@ def em(title, description, color=defaultEmbed["color"], footer=defaultEmbed["foo
     embed = discord.Embed()
     embed.title = title
     embed.description = description
-    if isinstance(color, discord.Color):
-        embed.color = color
+    if isinstance(color, discord.Colour):
+        embed.colour = color
     else:
-        embed.color = discord.Color(color)
+        embed.colour = discord.Colour(color)
     embed.timestamp = dt.utcnow()
     embed.set_footer(text=footer)
     embed.set_thumbnail(url=thumbnail)

@@ -30,7 +30,7 @@ def make_image_with_string(string, hardness):
 def gen_captcha(hardness):
     randstring = create_captcha_string(hardness)
     img, color = make_image_with_string(randstring, hardness)
-    filename = os.path.join(os.getcwd(), "captcha.png")
+    filepath = os.path.join(os.getcwd(), "captcha.png")
     img.save(filepath)
     return randstring, filepath, color
 

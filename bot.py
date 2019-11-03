@@ -3,7 +3,7 @@ from discord.ext import commands
 from embed import em
 import json
 from glob import glob
-
+import asyncio
 
 class Help(commands.HelpCommand):
     def get_command_signature(self, command):
@@ -23,7 +23,7 @@ class Help(commands.HelpCommand):
             if cog:
                 if not hasattr(cog, "__name__"):
                     continue
-                embed = em(cog.__name__, cog.__description)
+                embed = em(cog.__name__, cog.__description__)
                 signitures = "\n".join(
                     [self.get_command_signature(c) for c in commands])
                 if signitures:
@@ -68,7 +68,7 @@ class Help(commands.HelpCommand):
                     break
                 if str(r.emoji) == config['emojis']["info"]:
                     prev = msg.embeds[0]
-                    await msg.edit(embed=em(self.context.bot, f"To move pages use the {config['emojis']['forwards']} and {config['emojis']['backwards']}\nTo quit using the {config['emojis']['quit']} emoji\nTo go to a certain page use the {config['emojis']['numberChoice']} emoji!", "How to use the help menu!", footer="This message will be reset in 5 seconds..."))
+                    await msg.edit(embed=em("How to use the help menu!", f"To move pages use the {config['emojis']['forwards']} and {config['emojis']['backwards']}\nTo quit using the {config['emojis']['quit']} emoji\nTo go to a certain page use the {config['emojis']['numberChoice']} emoji!",  footer="This message will be reset in 5 seconds..."))
                     await asyncio.sleep(5)
                     await msg.edit(embed=prev)
                 if str(r.emoji) == config['emojis']["forwards"]:
@@ -83,7 +83,7 @@ class Help(commands.HelpCommand):
                     await msg.edit(embed=self.get_category_message(mapping, page))
                 if str(r.emoji) == config['emojis']["numberChoice"]:
                     prev = msg.embeds[0]
-                    await msg.edit(embed=em(self.context.bot, "Enter your number!", "Choose a page!", footer="This message will be reset in 10 seconds..."))
+                    await msg.edit(embed=em("Enter your number!", "Please say a number to move to that page!", footer="This message will be reset in 10 seconds..."))
 
                     def check(message):
                         return message.author.id == self.context.author.id and message.channel == self.context.channel
@@ -110,7 +110,7 @@ class Help(commands.HelpCommand):
 
 class Bot(commands.Bot):
     def __init__(self, **kw):
-        with open("config.json") as f:
+        with open("config.json", encoding="utf8") as f:
             self.config = json.loads(f.read())
         kw["help_command"] = Help()
         super().__init__(self.config["prefix"], **kw)
